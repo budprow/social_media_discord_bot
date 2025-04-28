@@ -17,6 +17,15 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Created and activated a virtual environment named `venv`.
     * Installed the `discord.py` library.
 
+3.  **Writing the Basic Discord Bot Structure and Connecting to Discord**
+
+    * Created a main Python file named `bot.py`.
+    * Implemented basic code to connect to the Discord API using the bot token.
+    * Defined bot intents.
+    * Implemented an `on_ready` event to print connection information to the console.
+    * Added a simple `!ping` command for testing.
+    * The bot can now be run using `python bot.py` and should appear online in the Discord server.
+
 ## Next Steps
 
-The next step will involve writing the basic structure of our Discord bot and connecting it to Discord using the bot token.
+The next step will involve researching and choosing the first social media platform we want to scrape and exploring the necessary web scraping libraries.
