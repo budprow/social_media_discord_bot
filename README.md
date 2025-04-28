@@ -26,6 +26,10 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Added a simple `!ping` command for testing.
     * The bot can now be run using `python bot.py` and should appear online in the Discord server.
 
-## Next Steps
+4.  **Fetching Website Content (Completed [Current Date])**
 
-The next step will involve researching and choosing the first social media platform we want to scrape and exploring the necessary web scraping libraries.
+    * Created a Python script (initially for testing) to fetch the HTML content of a Reddit URL using the `requests` library.
+    * Included a step to check the HTTP status code of the response to ensure the request was successful.
+    * Retrieved the HTML content using `response.text`.
+    * Added a basic User-Agent header to the request to mimic a web browser.
+    * The script prints a success message and the first 500 characters of the HTML content to the console.
