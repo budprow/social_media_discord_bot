@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import logging
 
 target_url = 'https://www.reddit.com/r/sports/'
 headers = {
@@ -13,20 +14,43 @@ if response.status_code == 200:
     soup = BeautifulSoup(html_content, 'html.parser')
     print("\nBeautiful Soup object ceated.")
 
-    post_title_elements = soup.select('a > faceplate-screen-reader-content')
-    post_link_elements = soup.select_one('a[slot="full-post-link"]')
+    # post_title_elements = soup.select('#main-content > div:nth-child(4) > shreddit-feed > article:nth-child(4)')
+    # post_link_elements = soup.select_one('#post-title-t3_1k8shqj')
 
-    if len(post_title_elements) == len(post_link_elements):
-        for i in range(len(post_title_elements)):
-            title = post_title_elements[i].get_text(strip=True)
-            link = post_link_elements[i]['href']
-            if not link.startswith('http'):
-                link = f'https://www.reddit.com{link}'
-            print(f"Title: {title}")
-            print(f"Link: {link}")
-            print("------")
+    # if len(post_title_elements) == len(post_link_elements):
+    #     for i in range(len(post_title_elements)):
+    #         title = post_title_elements[i].get_text(strip=True)
+    #         link = post_link_elements[i]['href']
+    #         if not link.startswith('http'):
+    #             link = f'https://www.reddit.com{link}'
 
+    feed = soup.find('shreddit-feed')
+    if not feed:
+        logging.error("Could not find the main feed container (<shreddit-feed>).")
+        exit()
+
+    post_element = feed.find('shreddit-post')
+    
+    if post_element:
+        post_title = post_element.get('post-title', "Title not found")
+        relative_link = post_element.get('permalink', None)
+
+    if relative_link:
+         post_link = f'https://www.reddit.com{relative_link}' if not relative_link.startswith('http') else relative_link
     else:
-        print(f"Warning: Found {len(post_title_elements)} titles and {len(post_link_elements)} links. Counts may not match.")
+         post_link = "Link not found"
 
-else: print("Failed to fetch contenct. Status code: {response.status_code}")
+    title = post_title
+    link = post_link
+
+    print(f"Title: {title}")
+    print(f"Link: {link}")
+    print("------")
+
+else:
+        logging.warning("Could not find any <shreddit-post> element.")
+    
+# else:
+#     print(f"Warning: Found {len(post_title)} titles and {len(link)} links. Counts may not match.")
+    
+    # else: print("Failed to fetch contenct. Status code: {response.status_code}")
