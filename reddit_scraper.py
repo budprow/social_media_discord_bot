@@ -12,45 +12,31 @@ if response.status_code == 200:
     print(f"Successfully fetched the content from: {target_url}")
     html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
-    print("\nBeautiful Soup object ceated.")
-
-    # post_title_elements = soup.select('#main-content > div:nth-child(4) > shreddit-feed > article:nth-child(4)')
-    # post_link_elements = soup.select_one('#post-title-t3_1k8shqj')
-
-    # if len(post_title_elements) == len(post_link_elements):
-    #     for i in range(len(post_title_elements)):
-    #         title = post_title_elements[i].get_text(strip=True)
-    #         link = post_link_elements[i]['href']
-    #         if not link.startswith('http'):
-    #             link = f'https://www.reddit.com{link}'
+    print("\nBeautiful Soup object created.")
 
     feed = soup.find('shreddit-feed')
     if not feed:
         logging.error("Could not find the main feed container (<shreddit-feed>).")
         exit()
 
-    post_element = feed.find('shreddit-post')
-    
-    if post_element:
-        post_title = post_element.get('post-title', "Title not found")
-        relative_link = post_element.get('permalink', None)
+    post_elements = feed.find_all('shreddit-post')
 
-    if relative_link:
-         post_link = f'https://www.reddit.com{relative_link}' if not relative_link.startswith('http') else relative_link
+    if post_elements:
+        print("\nFound the following post titles and links:")
+        for post_element in post_elements:
+            post_title = post_element.get('post-title', "Title not found")
+            relative_link = post_element.get('permalink', None)
+
+            if relative_link:
+                post_link = f'https://www.reddit.com{relative_link}' if not relative_link.startswith('http') else relative_link
+            else:
+                post_link = "Link not found"
+
+            print(f"Title: {post_title}")
+            print(f"Link: {post_link}")
+            print("------")
     else:
-         post_link = "Link not found"
-
-    title = post_title
-    link = post_link
-
-    print(f"Title: {title}")
-    print(f"Link: {link}")
-    print("------")
+        logging.warning("Could not find any <shreddit-post> elements.")
 
 else:
-        logging.warning("Could not find any <shreddit-post> element.")
-    
-# else:
-#     print(f"Warning: Found {len(post_title)} titles and {len(link)} links. Counts may not match.")
-    
-    # else: print("Failed to fetch contenct. Status code: {response.status_code}")
+    print(f"Failed to fetch content. Status code: {response.status_code}")
