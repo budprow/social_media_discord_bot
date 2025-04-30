@@ -38,8 +38,10 @@ This project aims to create a Discord bot that scrapes new posts from various so
 
     * Imported the `BeautifulSoup` library.
     * Parsed the fetched HTML content using `BeautifulSoup(html_content, 'html.parser')`.
-    * Used CSS selectors (`soup.select()`) to target HTML elements containing post titles and links.
-    * Iterated through the selected elements to extract the title text using `.get_text(strip=True)` and the link from the `href` attribute.
-    * Noted that Reddit's HTML structure can be dynamic, and selectors might need adjustments.
-    * Handled cases where links might be relative and prepended the base Reddit URL if necessary.
-    * Added basic logic to try and pair titles with their corresponding links.
+    * Located the main feed container using `soup.find('shreddit-feed')`.
+    * Used `feed.find_all('shreddit-post')` to retrieve a list of all individual post elements.
+    * Iterated through the list of post elements.
+    * For each post element, extracted the title using the `get('post-title')` method.
+    * Extracted the relative link using the `get('permalink')` method and constructed the full URL.
+    * Printed the title and link for each post found.
+    * Added error handling for cases where the main feed or post elements are not found.
