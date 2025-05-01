@@ -34,7 +34,7 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Added a basic User-Agent header to the request to mimic a web browser.
     * The script prints a success message and the first 500 characters of the HTML content to the console.
 
-5.  **Parsing HTML with Beautiful Soup (Completed 4/30/25)**
+5.  **Parsing HTML with Beautiful Soup**
 
     * Imported the `BeautifulSoup` library.
     * Parsed the fetched HTML content using `BeautifulSoup(html_content, 'html.parser')`.
@@ -46,7 +46,7 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Printed the title and link for each post found.
     * Added error handling for cases where the main feed or post elements are not found.
 
-6.   **Integrating Reddit Scraping into Discord Bot (Completed 4/30/25)**
+6.   **Integrating Reddit Scraping into Discord Bot**
 
     * Moved the Reddit scraping logic into the main `bot.py` file within an asynchronous function `get_reddit_posts()`.
     * Introduced the `discord.ext.tasks` to schedule periodic scraping.
@@ -57,3 +57,23 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Started the scraping task in the `on_ready()` event.
     * Basic error handling was added to the `get_reddit_posts()` function to catch request exceptions.
     * Noted the need for handling duplicate posts and potential rate limiting.
+
+7.  **Preventing Duplicate Notifications**
+
+    * Implemented a mechanism to prevent sending duplicate notifications using a JSON file (`sent_posts.json`) for storage.
+    * Added asynchronous functions `load_sent_posts()` and `save_sent_posts()` to read and write the list of sent post links to the JSON file.
+    * Modified the `scrape_reddit` task to:
+    * Load the list of already sent post links at the beginning of each scrape.
+    * Check if a newly scraped post's link exists in the loaded list.
+    * If the link is new, send a Discord notification and add the link to the list.
+    * After processing all scraped posts, save the updated list of sent links back to the JSON file.
+    * Included basic error handling for the case where the JSON file doesn't exist or contains invalid JSON.
+
+## Potential Improvements
+
+With the basic Reddit scraping and duplicate prevention in place, the next steps could involve:
+* **Adding support for more social media platforms.** This would require creating similar scraping logic for each platform.
+* **Making the bot configurable.** Allowing users to specify which subreddits or social media accounts to follow through commands or a configuration file.
+* **Improving the formatting of the Discord notifications** (e.g., including author, thumbnails, etc.).
+* **Implementing more robust error handling and logging.**
+* **Considering more efficient storage mechanisms** if the list of sent posts grows very large.
