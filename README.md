@@ -34,7 +34,7 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Added a basic User-Agent header to the request to mimic a web browser.
     * The script prints a success message and the first 500 characters of the HTML content to the console.
 
-5.  **Parsing HTML with Beautiful Soup (Completed 4/28/25)**
+5.  **Parsing HTML with Beautiful Soup (Completed 4/30/25)**
 
     * Imported the `BeautifulSoup` library.
     * Parsed the fetched HTML content using `BeautifulSoup(html_content, 'html.parser')`.
@@ -45,3 +45,15 @@ This project aims to create a Discord bot that scrapes new posts from various so
     * Extracted the relative link using the `get('permalink')` method and constructed the full URL.
     * Printed the title and link for each post found.
     * Added error handling for cases where the main feed or post elements are not found.
+
+6.   **Integrating Reddit Scraping into Discord Bot (Completed 4/30/25)**
+
+    * Moved the Reddit scraping logic into the main `bot.py` file within an asynchronous function `get_reddit_posts()`.
+    * Introduced the `discord.ext.tasks` to schedule periodic scraping.
+    * Defined constants for the target Reddit URL, headers, and the Discord notification channel ID (with a reminder to replace the placeholder).
+    * Created a `@tasks.loop()` that runs the `get_reddit_posts()` function at a set interval (currently 60 seconds).
+    * Inside the loop, the bot retrieves the latest posts and sends them as Discord embeds to the specified channel.
+    * Implemented a `before_loop` hook to ensure the task starts after the bot is ready.
+    * Started the scraping task in the `on_ready()` event.
+    * Basic error handling was added to the `get_reddit_posts()` function to catch request exceptions.
+    * Noted the need for handling duplicate posts and potential rate limiting.
